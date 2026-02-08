@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_classic.memory import ConversationBufferMemory
@@ -29,7 +30,9 @@ def get_text_chunks(text):
     return text_splitter.split_text(text)
 
 def vector_store_from_chunks(chunks):
-    embeddings = HuggingFaceEmbeddings(model_name="hkunlp/instructor-xl")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    #embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+
     vector_store = FAISS.from_texts(texts=chunks, embedding=embeddings)
     return vector_store
 
